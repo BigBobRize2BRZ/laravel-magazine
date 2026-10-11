@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -21,5 +23,4 @@ use Illuminate\Support\Facades\Route;
     return view('index');
 });*/
 
-Route::get('/', [\App\Http\Controllers\ProductController::class, 'index'])->name('home');
-//Route::get('/', '\App\Http\Controllers\ProductController@index')->name('home');
+Route::get('/', [ProductController::class, 'index'])->name('home');
