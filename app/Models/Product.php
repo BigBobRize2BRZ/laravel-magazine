@@ -29,4 +29,13 @@ class Product extends Model
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function getImage()
+    {
+        if (!$this->img) {
+            return asset('no-image.png');
+        } else {
+            return asset("storage/{$this->img}");
+        }
+    }
 }
