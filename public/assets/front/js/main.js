@@ -1,22 +1,40 @@
-$(function() {
- $('.addtocart').on('submit', function () {
+function showCart(cart) {
+    $('#cart-modal .modal-body').html(cart);
+    $('#cart-modal').modal('show'); 
+}
 
-    let form = $(this);
+function getCart(action) {
     $.ajax({
-        url: form.attr('action'),
-        data: form.serialize(),
-        type: 'post',
+        url: action,
+        type: 'get', 
         success: function (result) {
-            console.log(result);
+            showCart(result);
         },
-        error: function (msg) {
-            alert('Error!');
-            console.log(msg.responseJSON);
-            form[0].reset();
+        error: function (xhr, status, error) {
+            console.error('Ошибка загрузки корзины:', status, error);
+            alert('Ошибка при загрузке корзины');
         }
     });
-    return false;
- })
+}
 
+$(function () {
+    $('.addtocart').on('submit', function () {
+        let form = $(this);
 
+        $.ajax({
+            url: form.attr('action'),
+            data: form.serialize(),
+            type: 'post',
+            success: function (result) {
+                showCart(result);
+            },
+            error: function (msg) {
+                alert('Error!');
+                console.log(msg.responseJSON);
+                form[0].reset();
+            }
+        });
+
+        return false; 
+    });
 });
