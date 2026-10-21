@@ -12,11 +12,12 @@ class CartController extends Controller
     {
         $request->validate([
             'product_id' => 'required|integer',
-            'qty' => 'required|integer',
+            'qty'        => 'required|integer|min:1',
         ]);
+
         $data = $request->all();
 
-        $product = Product::findOrFail ($data['product_id']);
+        $product = Product::findOrFail($data['product_id']);
         $cart = new Cart();
         $cart->addToCart($product, $data['qty']);
 

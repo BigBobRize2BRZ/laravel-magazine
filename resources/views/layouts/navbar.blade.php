@@ -23,7 +23,7 @@
                 <button onclick="getCart('{{ route('cart.show') }}')"
                         type="button" class="btn btn-primary">
                     Корзина
-                    <span class="badge badge-light">
+                    <span class="badge badge-light mini-cart-qty">
                         {{ session('cart_qty') ?? 0 }}
                     </span>
                 </button>
@@ -38,6 +38,7 @@
     </div>
 </nav>
 
+<!-- Модальное окно корзины -->
 <div class="modal fade" id="cart-modal" tabindex="-1" role="dialog"
      aria-labelledby="cart-modal-label" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -50,7 +51,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                
+                <!-- Сюда подгружается содержимое корзины -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary"
