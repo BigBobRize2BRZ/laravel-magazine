@@ -1,9 +1,37 @@
 function showCart(cart) {
     $('#cart-modal .modal-body').html(cart);
-    $('#cart-modal').modal('show'); 
+    
+    $('#cart-modal').modal('show');
 
-    let cartQty = $("#modal-cart-qty").text() ? $("#modal-cart-qty").text() : 0;
+    let qtyElement = $("#modal-cart-qty");
+    let qtyText = qtyElement.length ? qtyElement.text().trim() : "0";
+    let cartQty = parseInt(qtyText) || 0; 
+
+    console.log("=== ОТЛАДКА: Товаров в корзине (JS):", cartQty, "===");
+
+
     $('.mini-cart-qty').text(cartQty);
+
+    let footerButtons = $('#cart-modal .modal-footer .btn-cart');
+
+    if (cartQty > 0) {
+        footerButtons.removeClass('d-none').show();
+    } else {
+        footerButtons.addClass('d-none').hide();
+    }
+}
+
+function clearCart(action) {
+    $.ajax({
+        url: action,
+        type: 'get',
+        success: function (result) {
+            showCart(result);
+        },
+        error: function () {
+            alert('Ошибка при очистке корзины');
+        }
+    });
 }
 
 function getCart(action) {
@@ -23,6 +51,12 @@ function getCart(action) {
 $(function () {
     $('.addtocart').on('submit', function () {
         let form = $(this);
+        let qtyInput = form.find('input[name="qty"]');
+        let qty = parseInt(qtyInput.val());
+
+        if (isNaN(qty) || qty < 1) {
+            qtyInput.val(1);
+        }
 
         $.ajax({
             url: form.attr('action'),

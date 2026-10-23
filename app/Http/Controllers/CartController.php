@@ -16,8 +16,8 @@ class CartController extends Controller
         ]);
 
         $data = $request->all();
-
         $product = Product::findOrFail($data['product_id']);
+
         $cart = new Cart();
         $cart->addToCart($product, $data['qty']);
 
@@ -33,6 +33,15 @@ class CartController extends Controller
     {
         $cart = new Cart();
         $cart->delItem($product_id);
+        return view('cart.cart-modal');
+    }
+
+    public function clear()
+    {
+        session()->forget('cart');
+        session()->forget('cart_qty');
+        session()->forget('cart_total');
+
         return view('cart.cart-modal');
     }
 }

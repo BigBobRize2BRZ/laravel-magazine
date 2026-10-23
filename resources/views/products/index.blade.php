@@ -34,7 +34,7 @@
                         <form action="{{ route('cart.add') }}" method="post" class="addtocart">
                             @csrf
                             <div class="input-group">
-                                <input type="text" class="form-control" name="qty" value="1">
+                                <input type="number" class="form-control" name="qty" value="1" min="1" step="1">
                                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-info btn-block cart-addtocart" type="submit">
