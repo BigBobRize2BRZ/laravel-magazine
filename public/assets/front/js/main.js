@@ -40,4 +40,20 @@ $(function () {
 
         return false;
     });
+
+    $('#cart-modal .modal-body').on('click', '.del-item', function() {
+        $.ajax({
+            url: $(this).data('action'),
+            type: 'get',
+            success: function (result) {
+                showCart(result);
+            },
+            error: function (msg) {
+                alert('Error!');
+            }
+        });
+    });
+    
 });
+
+
