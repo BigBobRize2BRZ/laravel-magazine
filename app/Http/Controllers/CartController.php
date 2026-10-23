@@ -41,7 +41,6 @@ class CartController extends Controller
         session()->forget('cart');
         session()->forget('cart_qty');
         session()->forget('cart_total');
-
         return view('cart.cart-modal');
     }
 }

@@ -30,5 +30,5 @@ Route::get('/product/{slug}', [ProductController::class, 'show'])->name('product
 
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/del-item/{product_id}', [CartController::class, 'delItem'])->name('cart.del_item');
-Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
+Route::get('/cart/clear', [\App\Http\Controllers\CartController::class, 'clear'])->name('cart.clear');
