@@ -2,18 +2,14 @@ function showCart(cart) {
     $('#cart-modal .modal-body').html(cart);
     $('#cart-modal').modal('show');
 
-    // Ищем количество товаров
     let qtyElement = $("#modal-cart-qty");
     let qtyText = qtyElement.length ? qtyElement.text().trim() : "0";
     let cartQty = parseInt(qtyText) || 0; 
 
-    // Обновляем счетчик в шапке
     $('.mini-cart-qty').text(cartQty);
 
-    // Ищем кнопки в подвале модального окна
     let footerButtons = $('#cart-modal .modal-footer .btn-cart');
 
-    // Если товары есть - показываем, если нет - скрываем
     if (cartQty > 0) {
         footerButtons.removeClass('d-none');
     } else {
