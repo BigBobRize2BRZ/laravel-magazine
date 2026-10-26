@@ -33,7 +33,7 @@ class Product extends Model
     public function getImage()
     {
         if (!$this->img) {
-            return asset('no-image.png');
+            return asset('assets/front/img/no-image.png');
         } else {
             return asset("storage/{$this->img}");
         }
