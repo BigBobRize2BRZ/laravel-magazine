@@ -26,7 +26,7 @@
                 <td>@priceformat($item['price']) руб.</td>
                 <td>{{ $item['qty'] }}</td>
                 <td>
-                    <span class="text-danger del-item" data-action="{{ route('cart.del_item', ['product_id' => $item['id']]) }}" style="cursor: pointer;">
+                    <span class="text-danger del-item" data-action="{{ route('cart.del_item', ['product_id' => $item['product_id']]) }}">
                         <i class="fas fa-times"></i>
                     </span>
                 </td>

@@ -35,3 +35,5 @@ Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/del-item/{product_id}', [CartController::class, 'delItem'])->name('cart.del_item');
 Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
 Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
+
+Route::match(['get', 'post'], '/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');

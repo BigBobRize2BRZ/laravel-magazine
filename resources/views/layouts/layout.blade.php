@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -41,9 +42,9 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
 
-                    <button type="button" class="btn btn-primary btn-cart d-none">
+                    <a href="{{ route('cart.checkout') }}" class="btn btn-primary btn-cart @if(empty(session('cart'))) d-none @endif">
                         Оформить заказ
-                    </button>
+                    </a>
 
                     <button type="button" onclick="clearCart('{{ route('cart.clear') }}')" class="btn btn-danger btn-cart d-none">
                         Очистить корзину
