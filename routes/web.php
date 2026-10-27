@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -17,13 +18,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/*Route::get('/', function () {
-    return view('welcome');
-});*/
-
-/*Route::get('/', function () {
-    return view('index');
-});*/
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/', [ProductController::class, 'index'])->name('home');
 
@@ -37,3 +34,6 @@ Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
 Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
 
 Route::match(['get', 'post'], '/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+Route::get('/register', [UserController::class, 'create'])->name('register.create');
+Route::post('/register', [UserController::class, 'store'])->name('register.store');
