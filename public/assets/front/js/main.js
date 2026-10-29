@@ -9,7 +9,6 @@ function showCart(cart) {
     $('.mini-cart-qty').text(cartQty);
 
     let footerButtons = $('#cart-modal .modal-footer .btn-cart');
-
     if (cartQty > 0) {
         footerButtons.removeClass('d-none');
     } else {
@@ -22,16 +21,13 @@ function clearCart(action) {
         url: action,
         type: 'get',
         success: function (result) {
-            let now_location = document.location.pathname;
-            if (now_location == '/cart/checkout') {
-                location = '/cart/checkout';
+            if (document.location.pathname === '/cart/checkout') {
+                location.reload();
             } else {
                 showCart(result);
             }
         },
-        error: function () {
-            alert('Ошибка');
-        }
+        error: function () { alert('Ошибка'); }
     });
 }
 
@@ -39,9 +35,7 @@ function getCart(action) {
     $.ajax({
         url: action,
         type: 'get',
-        success: function (result) {
-            showCart(result);
-        },
+        success: function (result) { showCart(result); },
         error: function (xhr, status, error) {
             console.error('Ошибка загрузки корзины:', status, error);
             alert('Ошибка при загрузке корзины');
@@ -50,46 +44,50 @@ function getCart(action) {
 }
 
 $(function () {
-    $('.addtocart').on('submit', function () {
+    $(document).on('submit', '.addtocart', function () {
         let form = $(this);
         let qtyInput = form.find('input[name="qty"]');
         let qty = parseInt(qtyInput.val());
-
-        if (isNaN(qty) || qty < 1) {
-            qtyInput.val(1);
-        }
+        if (isNaN(qty) || qty < 1) qtyInput.val(1);
 
         $.ajax({
             url: form.attr('action'),
             data: form.serialize(),
             type: 'post',
-            success: function (result) {
-                showCart(result);
-            },
+            success: function (result) { showCart(result); },
             error: function (msg) {
                 alert('Error!');
                 console.log(msg.responseJSON);
                 form[0].reset();
             }
         });
-
         return false;
     });
 
-    $('#cart-modal .modal-body').on('click', '.del-item', function () {
+    $(document).on('click', '.del-item', function () {
+        let action = $(this).data('action');
+        console.log('del-item clicked. action =', action);
+        console.log('pathname =', document.location.pathname);
+
+        if (!action) {
+            console.error('.del-item без data-action!');
+            return;
+        }
+
         $.ajax({
-            url: $(this).data('action'),
+            url: action,
             type: 'get',
             success: function (result) {
-                let now_location = document.location.pathname;
-                if (now_location == '/cart/checkout') {
-                    location = '/cart/checkout';
+                console.log('AJAX success, reload?', document.location.pathname === '/cart/checkout');
+                if (document.location.pathname === '/cart/checkout') {
+                    location.reload();
                 } else {
                     showCart(result);
                 }
             },
-            error: function (msg) {
-                alert('Error!');
+            error: function (xhr) {
+                console.error('AJAX error', xhr.status, xhr.responseText);
+                alert('Ошибка при удалении');
             }
         });
     });

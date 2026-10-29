@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\MainController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -18,22 +19,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get('/', [ProductController::class, 'index'])->name('home');
-
 Route::get('/product/{slug}', [ProductController::class, 'show'])->name('products.show');
-
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('categories.show');
 
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart/del-item/{product_id}', [CartController::class, 'delItem'])->name('cart.del_item');
-Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
 Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-
+Route::get('/cart/show', [CartController::class, 'show'])->name('cart.show');
 Route::match(['get', 'post'], '/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
-Route::get('/register', [UserController::class, 'create'])->name('register.create');
-Route::post('/register', [UserController::class, 'store'])->name('register.store');
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/register', [UserController::class, 'create'])->name('register.create');
+    Route::post('/register', [UserController::class, 'store'])->name('register.store');
+
+    Route::get('/login', [UserController::class, 'loginForm'])->name('login.create');
+    Route::post('/login', [UserController::class, 'login'])->name('login');
+});
+
+Route::get('/logout', [UserController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function () {
+    Route::get('/', [MainController::class, 'index'])->name('admin.index');
+
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class)->except(['show']);
+    Route::resource('products',   \App\Http\Controllers\Admin\ProductController::class)->except(['show']);
+});
