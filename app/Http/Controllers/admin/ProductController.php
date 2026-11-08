@@ -15,7 +15,7 @@ class ProductController extends Controller
     {
         $products = Product::with(['category', 'status'])
             ->orderBy('id', 'desc')
-            ->paginate(20);
+            ->paginate(10);
 
         return view('admin.products.index', compact('products'));
     }
@@ -30,17 +30,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title'       => 'required',
-            'content'     => 'required',
-            'category_id' => 'required|integer',
-            'status_id'   => 'required|integer',
-            'price'       => 'required|numeric|min:0',
-            'old_price'   => 'nullable|numeric|min:0',
-            'img'         => 'nullable|image',
-        ]);
-
-        $data = $request->all();
+        $data = $this->validateData($request);
 
         if (empty($data['old_price'])) {
             $data['old_price'] = 0;
@@ -70,19 +60,10 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title'       => 'required',
-            'content'     => 'required',
-            'category_id' => 'required|integer',
-            'status_id'   => 'required|integer',
-            'price'       => 'required|numeric|min:0',
-            'old_price'   => 'nullable|numeric|min:0',
-            'img'         => 'nullable|image',
-        ]);
+        $data = $this->validateData($request);
 
         $product = Product::findOrFail($id);
-        $data = $request->except(['_token', '_method', 'img']);
-
+        
         if (empty($data['old_price'])) {
             $data['old_price'] = 0;
         }
@@ -116,5 +97,27 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Товар удалён');
+    }
+
+    private function validateData(Request $request): array
+    {
+        $request->validate([
+            'title'       => 'required|string|max:255',
+            'content'     => 'required|string',
+            'price'       => 'required|numeric|min:0',
+            'old_price'   => 'nullable|numeric|min:0',
+            'qty'         => 'nullable|integer|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'status_id'   => 'required|exists:statuses,id',
+            'img'         => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'hit'         => 'nullable|boolean',
+            'sale'        => 'nullable|boolean',
+        ]);
+
+        $data = $request->except(['img', '_token', '_method']);
+        $data['hit']  = $request->boolean('hit');
+        $data['sale'] = $request->boolean('sale');
+
+        return $data;
     }
 }

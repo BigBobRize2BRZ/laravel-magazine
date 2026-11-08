@@ -22,6 +22,7 @@ class Product extends Model
         'old_price',
         'hit',
         'sale',
+        'qty',
     ];
     
     public function sluggable(): array
